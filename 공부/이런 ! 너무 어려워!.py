@@ -2,7 +2,7 @@
 더 보기 좋게 만들어 보세요.
 """
 
-import tkinter
+import tkinter, random
 
 """이 프로그램은 아주 간단한 퀴즈를 만드는 프로그램입니다."""
 score = 0
@@ -14,24 +14,25 @@ q3 = [['힘 = 가속도 * 질량', '에너지 = 질량 * 빛의 속도 ^2', 'a�
       ['−253.15 °C', '−273.35 °C', '−273.11 °C', '−273.15 °C'], ['난자 + 정자', '정자 + 수정란', '난자 + 정자 * 2', '난자 + 수정란']]
 
 """정답과 오답을 알려주는 함수"""
-
+mg = ['어떻게 그렇게 멍청할수가 있는 거죠?', '지나가던 사람도 가다 욕을 할 정도의 지능!', 'ㅋㅋㅋㅋㅋㅋㅋ 이 바보', '맵다 매워....', '코드 뜯었죠? 이거 원래 안나오는 오답 메시지인데... 꺼.지.세.요']
 
 def yesorno(a='', a1=''):
-    global score, check
+    global score, check, mg
     if a1 == a and not a == '':
         label2.config(text="정답입니다.")
         score = score + 1
     elif a1 == a and a == '':
         pass
     else:
-        label2.config(text="오답입니다!!!!")
+
+        label2.config(text="오답입니다!!!!" + mg[random.randint(1,4)])
     return
 
 
 window = tkinter.Tk()
 
-window.title("최수길-퀴즈프로그램 V 1.0")
-window.geometry("640x400+100+100")
+window.title("유지우의 개빡치는 퀴즈프로그램 V 1.0")
+window.geometry("1040x800+100+100")
 window.resizable(False, False)
 
 label1 = tkinter.Label(window, text="다음에 나오는 퀴즈를 풀어 주세요.")
@@ -40,7 +41,7 @@ label1.pack()
 label2 = tkinter.Label(window, text='아주 쉬운 퀴즈 지금 부터 시작합나다!!! 문제는' + str(len(q1)) + '문제 입니다.')
 label2.config(font=("Courier", 10))
 label2.pack()
-label3 = tkinter.Label(window, text='여기에 문제가 출제 됩니다. 엔터키를 누루면 시작합니다.', anchor='n', fg='red', justify='left')
+label3 = tkinter.Label(window, text='여기에 문제가 출제 됩니다. 엔터키를 누루면 시작합니다.', anchor='n', fg='blue', justify='left')
 label3.config(font=("Courier", 13), )
 label3.pack()
 
@@ -51,7 +52,7 @@ def paroblem(event):
         aa = entry.get()
         if check < len(q1):
             text = str()
-            text = text + str(check + 1) + '.번 문제 ' + q1[check]
+            text = text + str(check + 1) + '번 문제: ' + q1[check]
             for b1, b2 in enumerate(q3[check]):
                 text = text + '\n'
                 text = text + '  ' + str(b1 + 1) + ')' + str(b2)
@@ -59,7 +60,7 @@ def paroblem(event):
         yesorno(q2[check], aa)
         check += 1
     else:
-        label2.config(text='수고하셨어요')
+        label2.config(text="하나도 '안' 수고하셨어요")
         label3.config(text='풀어주셔서 감사합니다.')
     entry.delete(0, "end")
     label1.config(text='당신의 점수는' + str(score * 20) + '입니다.')
