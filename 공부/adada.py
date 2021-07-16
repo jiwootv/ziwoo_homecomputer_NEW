@@ -10,6 +10,7 @@ import random
 import pygame.sprite
 
 # 변수
+
 SCREEN_X = 640 * 2  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60
@@ -101,7 +102,7 @@ class Game:
         self.image = pygame.image.load('back.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (SCREEN_X, SCREEN_Y))
         self.image_dino = pygame.image.load('DIN.O.png').convert_alpha()
-        self.image_dino = pygame.transform.scale(self.image_dino, (260,200))
+        self.image_dino = pygame.transform.scale(self.image_dino, (260, 200))
         self.image_cloud = pygame.image.load('cloud.svg').convert_alpha()
 
     def run(self):
