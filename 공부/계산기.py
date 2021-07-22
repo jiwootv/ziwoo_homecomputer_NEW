@@ -56,9 +56,9 @@ class Calculation:
             calc.run(self)
 
     def run(self):
-        for i in range(0, 3):
+        for i in range(0, 2):
             self.num += 1
-            calc.say(self, self.num, 2)
+            calc.say(self.num, 2)
         calc.input(self)
         calc.result_print(self)
 
@@ -67,5 +67,5 @@ class Calculation:
         time.sleep(delay)
 
 
-calc = Calculation
+calc = Calculation()
 calc.run()
