@@ -19,19 +19,39 @@ sound = pygame.mixer.Sound("광.란.ogg")
 sound.play()
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     def __init__(self, root):
+        self.game = root
+        self.groups = self.game.all_sprite
+        pygame.sprite.Sprite.__init__(self, self.groups)
         self.x = 100
         self.y = SCREEN_Y - 200
         self.dx = 0
         self.dy = 0
         self.game = root
-        self.image = root.player_image
+        self.images = root.player_image
+        self.index = 0
+        self.image = self.images[self.index]
         self.hit = 0
         self.mask = pygame.mask.from_surface(self.image)
         self.player_dinos = []
         for x in range(1, 11):
-            self.player_dinos.append(pygame.image.load(f'../png/Idle ({x}).png'))
+            self.player_dinos.append(pygame.image.load(f'png/Idle ({x}).png'))
+        for x in range(1, 8):
+            self.player_dinos.append(pygame.image.load(f'png/Run ({x}).png'))
+        for x in range(1, 11):
+            self.player_dinos.append(pygame.image.load(f'png/Walk ({x}).png'))
+        for x in range(1, 12):
+            self.player_dinos.append(pygame.image.load(f'png/Jump ({x}).png'))
+        for x in range(1, 8):
+            self.player_dinos.append(pygame.image.load(f'png/Dead ({x}).png'))
+
+    def anim(self):
+        if self.index < len(self.images):
+            self.index += 1
+            self.image = self.images[self.index]
+        else:
+            self.index = 0
 
     def move(self):
         if self.game.pressed_key[K_UP] and self.y > 0:
@@ -42,6 +62,11 @@ class Player:
             self.x += -CHARACTER_SPEED
         if self.game.pressed_key[K_RIGHT] and self.x < SCREEN_X - 160:
             self.x += CHARACTER_SPEED
+        adb.anim()
+
+
+
+
 
     def draw(self):
         game.screen.blit(self.image, (self.x, self.y))
@@ -49,7 +74,7 @@ class Player:
     def hit_by(self, rain):
         return pygame.Rect(self.x, self.y, 200, 200).collidepoint((rain.x, rain.y))
 
-
+adb = Player
 class Rain:
     def __init__(self, x, y, root):
         self.x = x
@@ -109,6 +134,7 @@ class Game:
         self.load_data()
         self.rains = []
         self.clouds = []
+        self.all_sprite = pygame.sprite.LayeredUpdates()
         self.player = Player(self)
         self.pressed_key = pygame.key.get_pressed()
 
