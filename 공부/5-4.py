@@ -28,26 +28,15 @@ class Player(pygame.sprite.Sprite):
         self.y = SCREEN_Y - 200
         self.dx = 0
         self.dy = 0
-        self.game = root
-        self.images = root.player_image
+
+        self.images = self.game.player_dinos
         self.index = 0
         self.image = self.images[self.index]
         self.hit = 0
         self.mask = pygame.mask.from_surface(self.image)
-        self.player_dinos = []
-        for x in range(1, 11):
-            self.player_dinos.append(pygame.image.load(f'png/Idle ({x}).png'))
-        for x in range(1, 8):
-            self.player_dinos.append(pygame.image.load(f'png/Run ({x}).png'))
-        for x in range(1, 11):
-            self.player_dinos.append(pygame.image.load(f'png/Walk ({x}).png'))
-        for x in range(1, 12):
-            self.player_dinos.append(pygame.image.load(f'png/Jump ({x}).png'))
-        for x in range(1, 8):
-            self.player_dinos.append(pygame.image.load(f'png/Dead ({x}).png'))
 
     def anim(self):
-        if self.index < len(self.images):
+        if self.index < len(self.images)-1:
             self.index += 1
             self.image = self.images[self.index]
         else:
@@ -62,11 +51,7 @@ class Player(pygame.sprite.Sprite):
             self.x += -CHARACTER_SPEED
         if self.game.pressed_key[K_RIGHT] and self.x < SCREEN_X - 160:
             self.x += CHARACTER_SPEED
-        adb.anim() #131231213123
-
-
-
-
+        self.anim()  # 131231213123
 
     def draw(self):
         game.screen.blit(self.image, (self.x, self.y))
@@ -74,7 +59,10 @@ class Player(pygame.sprite.Sprite):
     def hit_by(self, rain):
         return pygame.Rect(self.x, self.y, 200, 200).collidepoint((rain.x, rain.y))
 
-adb = Player
+
+
+
+
 class Rain:
     def __init__(self, x, y, root):
         self.x = x
@@ -145,7 +133,19 @@ class Game:
         # 구름그림 불러오기
         self.image_cloud = pygame.image.load('cloud.svg').convert_alpha()
         self.player_image = pygame.image.load('다크 나이트.png').convert_alpha()
+        self.player_dinos = []
         self.player_image = pygame.transform.scale(self.player_image, (260, 200))
+
+        # for x in range(1, 11):
+            # self.player_dinos.append(pygame.image.load(f'png/Idle ({x}).png'))
+        for x in range(1, 8):
+            self.player_dinos.append(pygame.image.load(f'png/Run ({x}).png'))
+        # for x in range(1, 11):
+        #     self.player_dinos.append(pygame.image.load(f'png/Walk ({x}).png'))
+        # for x in range(1, 12):
+        #     self.player_dinos.append(pygame.image.load(f'png/Jump ({x}).png'))
+        # for x in range(1, 8):
+        #     self.player_dinos.append(pygame.image.load(f'png/Dead ({x}).png'))
 
     def run(self):
         self.opening()
@@ -229,7 +229,7 @@ class Game:
         self.screen.fill(pygame.Color('black'))
         stop = True
         self.draw_text(f'스페이스 바를 누르면 게임이 종료됩니다.', 30, pygame.Color('white'), 100, SCREEN_Y * 1 / 20)
-        self.draw_text(f'과연 이 전설 상현 1 다크 나이트는 숲을 물들일수 있을까....', 30, pygame.Color('white'), 100, SCREEN_Y * 2 / 20)
+        self.draw_text(f'다음에 계속...', 30, pygame.Color('white'), 100, SCREEN_Y * 2 / 20)
         pygame.mixer.fadeout(5000)
         pygame.display.flip()
         while stop:
