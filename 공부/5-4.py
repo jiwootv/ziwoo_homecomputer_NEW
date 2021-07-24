@@ -62,7 +62,7 @@ class Player(pygame.sprite.Sprite):
             self.x += -CHARACTER_SPEED
         if self.game.pressed_key[K_RIGHT] and self.x < SCREEN_X - 160:
             self.x += CHARACTER_SPEED
-        adb.anim()
+        adb.anim() #131231213123
 
 
 
