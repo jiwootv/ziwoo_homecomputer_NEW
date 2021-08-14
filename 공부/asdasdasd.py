@@ -4,6 +4,7 @@ import pygame, sys
 
 pygame.init()
 
+
 sound = pygame.mixer.Sound('넌-모찌나간다-_방패병_.wav')
 clock = pygame.time.Clock()
 
@@ -18,7 +19,7 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-    # x += random.randint(1,10)
+        # x += random.randint(1,10)
         if event.type == pygame.KEYDOWN:
             if event.key == (pygame.K_a or pygame.K_RIGHT):
                 key = -1
@@ -47,7 +48,7 @@ while True:
     if 0 > x:
         x = 1300 - i_x
         sound.play()
-    if y > 600-i_y:
+    if y > 600 - i_y:
         y = 0
         sound.play()
     if 0 > y:

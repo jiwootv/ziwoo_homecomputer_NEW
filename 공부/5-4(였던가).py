@@ -15,7 +15,7 @@ RAIN_NUMBER = 5
 TITLE = '새 상현 1'
 CHARACTER_SPEED = 5
 pygame.mixer.init()
-sound = pygame.mixer.Sound( "광.란.ogg" )
+sound = pygame.mixer.Sound("광.란.ogg")
 sound.play()
 
 class Player:
