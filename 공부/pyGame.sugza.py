@@ -19,8 +19,8 @@ SCREEN_X = 640 * 2  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60  # Frame
 GRAVITY = 0.3  # 중력값
-SoundList = ["광.란.ogg", "JOJO chapter 7 Johnny Josuke.wav"]
-STF = input('Drop sprite when space key is pressed (True or false) 스페이스 키를 눌렀을때 아바타 낙하')
+SoundList = ["광.란.ogg", "JOJO chapter 7 Johnny Josuke.wav"]  # 1번 음악과 2번 음악 (1번 출처: https://youtu.be/Z2RnHPPwpWE 2번 출처: https://youtu.be/65rKikBS5eE)
+STF = input('Drop sprite when space key is pressed (True or false) 스페이스 키를 눌렀을때 아바타 낙하')  # GRAVITI 사용(아래 참고)
 SOUND_TF = input(' Play sound or No sound(True or false)')
 
 BGM_TF = input('Play BGM or No BGM(True or false)')
@@ -33,7 +33,7 @@ if BGM_TF == 'True':
     sound.play(-1)
 
 
-class Figure(pygame.sprite.Sprite):
+class Figure(pygame.sprite.Sprite):  # 스프라이트
     def __init__(self, root):
         self.game = root
         self.image = pygame.Surface((random.randint(10, 30), random.randint(10, 30)))
@@ -53,7 +53,7 @@ class Figure(pygame.sprite.Sprite):
         self.rotate += self.rotate_speed
         self.image = pygame.transform.rotozoom(self.image_t, self.rotate, 1)
         self.image.set_colorkey((0, 0, 0))
-        if self.game.pressed_key[pygame.K_SPACE] and STF == 'True':
+        if self.game.pressed_key[pygame.K_SPACE] and STF == 'True':  # 스페이스 누르면 11m에서 떨어지는 모형탑훈련
             self.dir.y += GRAVITY
 
             self.pos += self.dir * self.speed
@@ -78,9 +78,9 @@ class Figure(pygame.sprite.Sprite):
             self.kill()
             del self
 
-    def col123(self):
-        self.dir = self.dir * -1
-        self.col_lim += 1
+    #def col123(self):
+        #self.dir = self.dir * -1
+        #self.col_lim += 1  (아쉽게 삭제)
 
     def reset(self):
         self.dir = pygame.Vector2(random.random() * 2 - 1, random.random() * 2 - 1)
@@ -90,12 +90,12 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption('화면 보호기 / 멍때리기')
-        self.img = ['DARK Knight.svg', 'back.png']
+        self.img = ['DARK Knight.svg', 'back.png']  # 배경
         # self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))  # 화면 세팅
         if not STF == 'True':
-            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)  # 전체화면
         else:
-            self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))
+            self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y))  # 1280x960
         self.clock = pygame.time.Clock()  # 시계 지정
         self.playing = True
         self.all_sprites = pygame.sprite.Group()
@@ -106,14 +106,14 @@ class Game:
         self.F = Figure(self)
 
     def run(self):
-        while self.playing:
+        while self.playing:  # 실행
             self.clock.tick(FPS)
             self.event()
             self.update()
             self.draw()
             pygame.display.update()
 
-    def event(self):
+    def event(self):  # 하.하.하
         self.pressed_key = pygame.key.get_pressed()
         # 종료 코드
         for event in pygame.event.get():
@@ -125,7 +125,7 @@ class Game:
             for a in re:
                 if not figure == a and SOUND_TF == 'True':
                     pygame.mixer.Sound.play(self.bomb)
-                    Figure.col123(self.F)
+                    Figure.col123(self.F)  # 잊혀진 그것...
 
     def update(self):
         if len(self.all_sprites) < 20:
