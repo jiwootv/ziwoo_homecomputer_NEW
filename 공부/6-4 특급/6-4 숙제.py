@@ -184,9 +184,9 @@ class Game:
 
     def update(self):
         if Screen_x / 8 * 2 > self.sa.pos.x:
-            self.camera.x = self.sa.move
+            self.camera.x = -10
         elif Screen_x * 6 / 8 < self.sa.pos.x:
-            self.camera.x = self.sa.move
+            self.camera.x = 10
         else:
             self.camera.x = 0
         for sprite in self.all_sprites:
