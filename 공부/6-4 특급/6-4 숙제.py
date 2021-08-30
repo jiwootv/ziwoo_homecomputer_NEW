@@ -68,6 +68,7 @@ class Sa(pygame.sprite.Sprite):
         self.pos = pygame.math.Vector2(0, 0)
         self.x123 = 1
         self.health = 300
+        self.move = 10
 
     def update(self):
         self.image = pygame.transform.rotozoom(self.image_t, self.angle, 1)
@@ -80,9 +81,9 @@ class Sa(pygame.sprite.Sprite):
         self.pos.y = Screen_y * 8 / 10
         self.rect.centerx = Screen_x / 2
         if self.game.pressed_key[pygame.K_RIGHT]:
-            self.pos.x += 10
+            self.pos.x += self.move
         if self.game.pressed_key[pygame.K_LEFT]:
-            self.pos.x += -10
+            self.pos.x -= self.move
         self.rect.centery = Screen_y * 8 / 10
         self.rect.center = self.pos
 
@@ -100,7 +101,7 @@ class Rain(pygame.sprite.Sprite):
         self.image = pygame.Surface((self.bold, self.len))
         self.color123 = ['Red', 'orange', 'yellow', 'green', 'skyblue', 'blue', 'purple', 'gray']
         self.image.fill(self.color123[self.red])
-        self.item_sound = pygame.mixer.Sound('MP_Electrical Sweep.mp3')
+        self.item_sound = pygame.mixer.Sound('Bite.wav')
 
         self.pos = vec(x, y)
         self.rect = self.image.get_rect(topleft=self.pos)
@@ -115,9 +116,10 @@ class Rain(pygame.sprite.Sprite):
                 del self
                 return
             if self.red == 1:
-                self.game.sa.health += 2
+                self.game.sa.move += 0.2
                 self.item_sound.play()
                 self.kill()
+                print(game.sa.move)
                 del self
                 return
 
@@ -182,9 +184,9 @@ class Game:
 
     def update(self):
         if Screen_x / 8 * 2 > self.sa.pos.x:
-            self.camera.x = -10
+            self.camera.x = self.sa.move
         elif Screen_x * 6 / 8 < self.sa.pos.x:
-            self.camera.x = 10
+            self.camera.x = self.sa.move
         else:
             self.camera.x = 0
         for sprite in self.all_sprites:
@@ -197,13 +199,14 @@ class Game:
                 self.end_time = pygame.time.get_ticks()
                 self.end_on = True
             draw_text(self.bg, "GAME OVER...", 50, pygame.Color('Blue'), 120, 240)
+
             print(self.score)
 
             if pygame.time.get_ticks() - self.end_time > 4000:
                 self.playing = False
     def draw(self):
         self.screen.fill((255, 255, 0))
-        for n in range(50):
+        for n in range(5000):
             self.screen.blit(self.bg, (Screen_x * (n - 2) - self.bgcamera.x, 0))
         self.all_sprites.draw(self.screen)
         self.ui.draw(self.screen)
