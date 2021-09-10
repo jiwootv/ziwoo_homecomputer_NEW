@@ -94,34 +94,93 @@ class Rain(pygame.sprite.Sprite):
         self.bold = random.randint(1, 4)
         self.game = root
         self.len = random.randint(5, 15)
-        self.color = pygame.Color('skyblue')
-        self.red = random.randint(0, 1)
+        self.random_color = pygame.Color('skyblue')
+        self.random_color = random.randint(0, 7)
         self.groups = self.game.rains, self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.image = pygame.Surface((self.bold, self.len))
         self.color123 = ['Red', 'orange', 'yellow', 'green', 'skyblue', 'blue', 'purple', 'gray']
-        self.image.fill(self.color123[self.red])
+        self.image.fill(self.color123[self.random_color])
         self.item_sound = pygame.mixer.Sound('Bite.wav')
+        self.speed_sound_up = pygame.mixer.Sound('Connect.wav')
+        self.speed_sound_down = pygame.mixer.Sound('Connect2.wav')
 
         self.pos = vec(x, y)
         self.rect = self.image.get_rect(topleft=self.pos)
         self.mask = pygame.mask.from_surface(self.image)
+        self.random_number = 0
+        self.bool = [False, False]
+        self.bool_v = 0
+        self.randomnum = 0
+
+    def randomcode(self):
+        self.random_number = random.randint(0, 8)
+        if self.random_number == 0:
+            self.game.sa.health -= 10
+            self.game.hit_sound.play()
+            self.kill()
+            del self
+            return
+        if self.random_number == 1:
+            self.game.sa.move += 0.2
+            self.speed_sound_up.play()
+            self.kill()
+            print(game.sa.move)
+            del self
+            return
+        if self.random_number == 2:
+            self.game.sa.move -= 0.2
+            self.speed_sound_down.play()
+            self.kill()
+            print(game.sa.move)
+            del self
+            return
+        if self.random_number == 3:
+            self.game.sa.health += 5
+            self.speed_sound_down.play()
+            self.kill()
+            print(game.sa.move)
+            del self
+            return
+        pass
 
     def update(self):
+
         if pygame.sprite.collide_mask(self, self.game.sa):
-            if self.red == 0:
+            if self.random_color == 0:  # 순서대로 빨 주 노 초 파 람 보 검(회색)
                 self.game.sa.health -= 10
                 self.game.hit_sound.play()
                 self.kill()
                 del self
                 return
-            if self.red == 1:
-                self.game.sa.move += 0.2
+            if self.random_color == 1:
+                self.randomnum = random.randint(1, 2)
+                if self.randomnum == 1 and self.game.sa.move > 2:
+                    self.game.sa.move -= 2
+                    self.speed_sound_down.play()
+                    self.kill()
+                    print(game.sa.move)
+                    del self
+                    return
+                return
+            if self.random_color == 2:
+                self.randomnum = random.randint(1, 2)
+                if self.randomnum == 1:
+                    self.game.sa.move += 2
+                    self.speed_sound_up.play()
+                    self.kill()
+                    print(game.sa.move)
+                    del self
+                    return
+            if self.random_color == 3:
+                self.game.sa.health += 5
                 self.item_sound.play()
                 self.kill()
                 print(game.sa.move)
                 del self
                 return
+
+
 
 
         self.pos.y += self.speed
@@ -156,7 +215,8 @@ class Game:
 
         self.camera = vec(0, 0)
         self.bgcamera = vec(0, 0)
-        self.hit_sound = pygame.mixer.Sound('효과음-_-부왘.wav')
+        self.hit_sound = pygame.mixer.Sound('Crunch.wav')
+        self.Lose = pygame.mixer.Sound('MP_롤 패배 음성.mp3')
 
 
 
@@ -184,9 +244,9 @@ class Game:
 
     def update(self):
         if Screen_x / 8 * 2 > self.sa.pos.x:
-            self.camera.x = -10
+            self.camera.x = -self.sa.move
         elif Screen_x * 6 / 8 < self.sa.pos.x:
-            self.camera.x = 10
+            self.camera.x = self.sa.move
         else:
             self.camera.x = 0
         for sprite in self.all_sprites:

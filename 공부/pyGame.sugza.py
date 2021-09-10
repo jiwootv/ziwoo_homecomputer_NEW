@@ -19,7 +19,7 @@ SCREEN_X = 640 * 2  # 화면 넓이
 SCREEN_Y = 480 * 2  # 화면 높이
 FPS = 60  # Frame
 GRAVITY = 0.3  # 중력값
-SoundList = ["광.란.ogg", "JOJO chapter 7 Johnny Josuke.wav"]  # 1번 음악과 2번 음악 (1번 출처: https://youtu.be/Z2RnHPPwpWE 2번 출처: https://youtu.be/65rKikBS5eE)
+SoundList = ["광.란.ogg", "JOJO chapter 7 Johnny Josuke.mp3"]  # 1번 음악과 2번 음악 (1번 출처: https://youtu.be/Z2RnHPPwpWE 2번 출처: https://youtu.be/65rKikBS5eE)
 STF = input('Drop sprite when space key is pressed (True or false) 스페이스 키를 눌렀을때 아바타 낙하')  # GRAVITI 사용(아래 참고)
 SOUND_TF = input(' Play sound or No sound(True or false)')
 
