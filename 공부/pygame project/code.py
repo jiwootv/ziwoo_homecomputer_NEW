@@ -9,6 +9,12 @@ FPS = 60
 vec = pygame.math.Vector2
 
 
+def draw_text(self, text, size, color, x, y):
+    font = pygame.font.SysFont('malgungothic', size)
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    self.screen.blit(text_surface, text_rect)
 
 
 class Mogi(pygame.sprite.Sprite):
@@ -86,6 +92,7 @@ class Game:
         self.mogichea.add(self.stick)
         self.mogi_num = 2
         self.mogi_kill = 0
+        self.stop = True
 
     def run(self):
         self.opning()
@@ -124,8 +131,21 @@ class Game:
         self.screen.blit(text_surface, text_rect)
 
     def opning(self):
-        self.draw_text('어느 날... 별 차이 없는 평범한 날.. 흘러나오는 뉴스..', 30, pygame.Color('Blue'), 30, 30)
+        self.draw_text('어느 날... 별 차이 없는 평범한 날.. 흘러나오는 뉴스..', 20, pygame.Color('Blue'), 150, 30)
+        self.draw_text('"최근, 모기의 개체수가 급격하게 늘어났습니다."  "모기의 수가 거의 2배 가까이 늘었다고 콰이스트 연구진은 말했습니다."', 20, pygame.Color('Blue'), 340, 60)
+        self.draw_text('', 20, pygame.Color('Blue'), 140, 30)
+        pygame.display.flip()
+        self.stop = True
+        while self.stop:
+            self.clock.tick(60)
+            self.pressed_key = pygame.key.get_pressed()
+            if self.pressed_key[pygame.K_SPACE]:
+                self.stop = False
 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.stop = False
+                    self.playing = False
 
 
 game = Game()
