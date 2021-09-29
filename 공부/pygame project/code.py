@@ -18,6 +18,14 @@ def draw_text(surface, text, size, color, x, y):
     text_rect.midtop = (x, y)
     surface.blit(text_surface, text_rect)
 
+class MogiGuzer(pygame.sprite.Sprite):
+    def __init__(self, root):
+        self.image = pygame.image.load('너는 모기꺼져를 잘못 만든다는 진실에 도달하지 못한다.png')
+        self.image = pygame.transform.scale(self.image , (400, 200))
+        self.rect = self.image.get_rect(center=(600, 370))
+        self.game = root
+        self.groups = self.game.all_sprite
+        pygame.sprite.Sprite.__init__(self, self.groups)
 
 class Mogi(pygame.sprite.Sprite):
     def __init__(self, root):
@@ -102,18 +110,22 @@ class Game:
         self.stick = Mogistick(self)
         self.all_sprite.add(self.stick)
         self.mogichea.add(self.stick)
+        self.mogiguzer = MogiGuzer(self)
+        self.all_sprite.add(self.mogiguzer)
         self.mogi_num = 30
         self.mogi_kill = 0
         self.stop = True
         self.fullscreen = False
-        self.stage = 4
+        self.stage = 9
         self.mogi_if = 0
         self.time = pygame.time.get_ticks()
         pygame.mixer.music.load('용구탄생의 비밀.wav')
         self.mogi_plus = 20
         self.time_minus = 100
         self.bgm1 = 0
-        self.next_bool = True
+        self.next_bool = [True, True, True, True, True]
+        self.mogiguzer_use_number = 0
+        self.mogiguzer_sound = pygame.mixer.Sound('효과음-_-부왘.wav')
         print(self.mogi_if + self.mogi_plus)
 
     def run(self):
@@ -144,6 +156,19 @@ class Game:
                 if event.key == pygame.K_F11 and not self.fullscreen:
                     self.fullscreen = True
                     self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y), pygame.FULLSCREEN)
+                if event.key == pygame.K_m:
+                    self.mogi_num -= 40
+                    self.mogi_kill += 40
+                    self.mogiguzer_sound.play()
+                    self.mogiguzer_use_number += 1
+                    print(len(self.mogi))
+                    for mogi in self.all_sprite:
+                        if mogi in self.mogi:
+                            mogi.kill()
+                            del mogi
+                    print(len(self.mogi))
+
+
 
     def update(self):
         self.all_sprite.update()
@@ -157,16 +182,36 @@ class Game:
             self.time_minus += int(self.time / 1000 + 10)
             del self
             return
-        if self.stage == 5 and self.next_bool:
+        if self.stage == 5 and self.next_bool[0]:
 
             self.screen.fill((255, 255, 255))
             draw_text(self.screen, '"최근, 모기가 갑자기 자취를 감췄습니다."', 20, pygame.Color('Blue'), 250, 30)
-            draw_text(self.screen, '"모기 연구진들은 모기가 알수 없는 이유로 자취를 감취었다고 생각합니다."', 20, pygame.Color('Blue'), 240, 60)
-            draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데..', 20, pygame.Color('Blue'), 300, 90)
+            draw_text(self.screen, '"모기 연구진들은 모기가 알수 없는 이유로 자취를 감취었다고 생각합니다."', 10, pygame.Color('Blue'), 300, 60)
+            draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데.. 근데 또 들어왔잖아!!!', 10, pygame.Color('Blue'), 300, 90)
             draw_text(self.screen, '스페이스바를 눌러 시작', 50, pygame.Color('Blue'), 300, 180)
             pygame.display.flip()
             self.time_stop()
-            self.next_bool = False
+            self.next_bool[0] = False
+        if self.stage == 10 and self.next_bool[0]:
+
+            self.screen.fill((255, 255, 255))
+            draw_text(self.screen, '"... 최근 모기가 다시 시민을 공격하고 있습니다."', 20, pygame.Color('Blue'), 250, 30)
+            draw_text(self.screen, '"아무래도 인간을 속이기 위한 작전 같습니다.. 그래서 살충제 모기꺼져를 드리겠습니다."', 10, pygame.Color('Blue'), 300, 60)
+            draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데.. 아... 언제 끝나..', 10, pygame.Color('Blue'), 300, 90)
+            draw_text(self.screen, '스페이스바를 눌러 시작', 50, pygame.Color('Blue'), 300, 180)
+            pygame.display.flip()
+            self.time_stop()
+            self.next_bool[0] = False
+        if self.mogi_num <= 0:
+            self.mogi_num = self.mogi_if + self.mogi_plus
+            self.mogi_kill = 0
+        if self.mogiguzer_use_number > 10:
+            draw_text(self.screen, '당신은 모기꺼져에 들어있던 방귀 때문에 죽었습니다')
+            pygame.display.flip()
+            self.time_stop()
+
+
+
 
 
 
