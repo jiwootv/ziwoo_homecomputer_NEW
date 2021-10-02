@@ -1,5 +1,5 @@
 # 파이게임 기본(클래스)
-
+# By jiwootv
 import pygame, random, os
 
 # 전역상수
