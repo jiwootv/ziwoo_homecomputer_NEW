@@ -177,7 +177,7 @@ class Game:
             self.all_sprite.add(self.mogi_sprite)
             self.mogi.add(self.mogi_sprite)
         if self.mogi_kill > self.mogi_if + self.mogi_plus:
-            self.mogi_plus += self.stage * 20
+            self.mogi_plus += self.stage * 10
             self.stage += 1
             self.time_minus += int(self.time / 1000 + 10)
             del self
@@ -196,11 +196,11 @@ class Game:
             self.screen.fill((255, 255, 255))
             print(self.next_bool)
             draw_text(self.screen, '"... 최근 모기가 다시 시민을 공격하고 있습니다."', 20, pygame.Color('Blue'), 250, 30)
-            draw_text(self.screen, '"아무래도 인간을 속이기 위한 작전 같습니다.. 그래서 살충제 모기꺼져를 드리겠습니다."', 10, pygame.Color('Blue'), 300, 60)
+            draw_text(self.screen, '"아무래도 인간을 속이기 위한 작전이였던 것같습니다.. 그래서 살충제 모기꺼져를 드리겠습니다."', 10, pygame.Color('Blue'), 300, 60)
             draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데.. 아... 언제 끝나..', 10, pygame.Color('Blue'), 300, 90)
             draw_text(self.screen, '스페이스바를 눌러 시작', 50, pygame.Color('Blue'), 300, 180)
             pygame.display.flip()
-            self.next_bool[0] = False
+            self.next_bool[1] = False
             self.time_stop()
 
         if self.mogi_num <= 0:
@@ -229,12 +229,12 @@ class Game:
                   pygame.Color('Black'), 450, 90)
         draw_text(self.screen, f'스테이지: {self.stage}', 30, pygame.Color('Blue'), 100, 400)
 
-    def time_stop(self, bool=True):
+    def time_stop(self):
         self.stop = True
         while self.stop:
             self.clock.tick(60)
             self.pressed_key = pygame.key.get_pressed()
-            if self.pressed_key[pygame.K_SPACE] and bool:
+            if self.pressed_key[pygame.K_SPACE]:
                 self.stop = False
 
 
