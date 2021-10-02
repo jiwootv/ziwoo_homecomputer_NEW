@@ -20,7 +20,7 @@ def draw_text(surface, text, size, color, x, y):
 
 class MogiGuzer(pygame.sprite.Sprite):
     def __init__(self, root):
-        self.image = pygame.image.load('제목 없음.png')
+        self.image = pygame.image.load('모기꺼져_LOCK.png')
         self.image = pygame.transform.scale(self.image , (400, 200))
         self.rect = self.image.get_rect(center=(600, 370))
         self.game = root
@@ -29,8 +29,8 @@ class MogiGuzer(pygame.sprite.Sprite):
 
 class Mogi(pygame.sprite.Sprite):
     def __init__(self, root):
-        self.image = pygame.image.load('mr.mogi.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.image = pygame.image.load('모양 1 (2).png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (30, 30))
         self.rect = self.image.get_rect()
         self.game = root
         self.groups = self.game.all_sprite, self.game.mogi
@@ -110,13 +110,13 @@ class Game:
         self.stick = Mogistick(self)
         self.all_sprite.add(self.stick)
         self.mogichea.add(self.stick)
-
-
+        self.mogiguzer = MogiGuzer(self)
+        self.all_sprite.add(self.mogiguzer)
         self.mogi_num = 30
         self.mogi_kill = 0
         self.stop = True
         self.fullscreen = False
-        self.stage = 9
+        self.stage = 10
         self.mogi_if = 0
         self.time = pygame.time.get_ticks()
         pygame.mixer.music.load('용구탄생의 비밀.wav')
@@ -157,6 +157,7 @@ class Game:
                     self.fullscreen = True
                     self.screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y), pygame.FULLSCREEN)
                 if event.key == pygame.K_m and 10 < self.stage:
+                    self.mogiguzer.image = pygame.image.load('모기꺼져.png')
                     self.mogi_num -= 40
                     self.mogi_kill += 40
                     self.mogiguzer_sound.play()
@@ -207,10 +208,13 @@ class Game:
             self.mogi_num = self.mogi_if + self.mogi_plus
             self.mogi_kill = 0
         if self.mogiguzer_use_number > 5:
+
             self.screen.fill((0, 0, 0))
             draw_text(self.screen, '당신은 모기꺼져에 들어있던 방귀 때문에 죽었습니다..', 20, pygame.Color('Blue'), SCREEN_X/2, SCREEN_Y / 2)
             draw_text(self.screen, '엔딩: 모기꺼져좀 적당히 쓰세요(엔딩 1, 히든엔딩)', 20, pygame.Color('Blue'), SCREEN_X/2, SCREEN_Y / 3)
             pygame.display.flip()
+            self.time_stop()
+            pygame.quit()
 
 
 
