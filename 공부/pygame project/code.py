@@ -2,6 +2,28 @@
 
 import pygame, random, os
 
+data = [0, 0, 0]
+music_list = ['정의집행.mp3', '용구탄생의 비밀.wav']
+# f = open('file0', 'r')
+# lines = f.readlines()
+# for line in lines:
+#     print(line)
+#     data.append(line)
+# f.close()
+
+f = open('file0', 'r')
+k = 0
+while True:
+
+
+    line = f.readline()
+    if not line: break
+    data[k] = int(line)
+    k += 1
+    print(data)
+f.close()
+f = open('file0', 'w')
+print(data)
 # 전역상수
 SCREEN_X = 640  # 화면 넓이
 SCREEN_Y = 480  # 화면 높이
@@ -18,14 +40,16 @@ def draw_text(surface, text, size, color, x, y):
     text_rect.midtop = (x, y)
     surface.blit(text_surface, text_rect)
 
+
 class MogiGuzer(pygame.sprite.Sprite):
     def __init__(self, root):
         self.image = pygame.image.load('너는 모기꺼져를 잘못 만든다는 진실에 도달하지 못한다.png')
-        self.image = pygame.transform.scale(self.image , (400, 200))
+        self.image = pygame.transform.scale(self.image, (400, 200))
         self.rect = self.image.get_rect(center=(600, 370))
         self.game = root
         self.groups = self.game.all_sprite
         pygame.sprite.Sprite.__init__(self, self.groups)
+
 
 class Mogi(pygame.sprite.Sprite):
     def __init__(self, root):
@@ -112,21 +136,21 @@ class Game:
         self.mogichea.add(self.stick)
         self.mogiguzer = MogiGuzer(self)
         self.all_sprite.add(self.mogiguzer)
-        self.mogi_num = 30
-        self.mogi_kill = 0
+        self.mogi_num = data[2]
+        self.mogi_kill = data[1]
         self.stop = True
         self.fullscreen = False
-        self.stage = 9
+        self.stage = (data[0])
         self.mogi_if = 0
         self.time = pygame.time.get_ticks()
-        pygame.mixer.music.load('용구탄생의 비밀.wav')
+        pygame.mixer.music.load(music_list[1])
         self.mogi_plus = 20
+        self.ending = False
         self.time_minus = 100
         self.bgm1 = 0
         self.next_bool = [True, True, True, True, True]
         self.mogiguzer_use_number = 0
         self.mogiguzer_sound = pygame.mixer.Sound('효과음-_-부왘.wav')
-        print(self.mogi_if + self.mogi_plus)
 
     def run(self):
         self.opning()
@@ -144,6 +168,10 @@ class Game:
         # 종료 코드
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                f.write(str(self.stage) + '\n')
+                f.write(str(self.mogi_kill) + '\n')
+                f.write(str(self.mogi_if + self.mogi_plus) + '\n')
+                f.close()
                 self.playing = False
             if event.type == pygame.KEYDOWN:
 
@@ -168,8 +196,6 @@ class Game:
                             del mogi
                     print(len(self.mogi))
 
-
-
     def update(self):
         self.all_sprite.update()
         if len(self.mogi) < self.mogi_num:
@@ -177,44 +203,55 @@ class Game:
             self.all_sprite.add(self.mogi_sprite)
             self.mogi.add(self.mogi_sprite)
         if self.mogi_kill > self.mogi_if + self.mogi_plus:
-            self.mogi_plus += self.stage * 20
+            self.mogi_plus += self.stage * 2
             self.stage += 1
             self.time_minus += int(self.time / 1000 + 10)
             del self
             return
         if self.stage == 5 and self.next_bool[0]:
-
             self.screen.fill((255, 255, 255))
             draw_text(self.screen, '"최근, 모기가 갑자기 자취를 감췄습니다."', 20, pygame.Color('Blue'), 250, 30)
             draw_text(self.screen, '"모기 연구진들은 모기가 알수 없는 이유로 자취를 감취었다고 생각합니다."', 10, pygame.Color('Blue'), 300, 60)
-            draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데.. 근데 또 들어왔잖아!!!', 10, pygame.Color('Blue'), 300, 90)
+            draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데.. 근데 또 들어왔잖아!!!', 10, pygame.Color('Blue'), 300,
+                      90)
             draw_text(self.screen, '스페이스바를 눌러 시작', 50, pygame.Color('Blue'), 300, 180)
             pygame.display.flip()
             self.time_stop()
             self.next_bool[0] = False
-        if self.stage == 10 and self.next_bool[0]:
-
+        if self.stage == 10 and self.next_bool[1]:
             self.screen.fill((255, 255, 255))
             draw_text(self.screen, '"... 최근 모기가 다시 시민을 공격하고 있습니다."', 20, pygame.Color('Blue'), 250, 30)
-            draw_text(self.screen, '"아무래도 인간을 속이기 위한 작전 같습니다.. 그래서 살충제 모기꺼져를 드리겠습니다."', 10, pygame.Color('Blue'), 300, 60)
-            draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데.. 아... 언제 끝나..', 10, pygame.Color('Blue'), 300, 90)
+            draw_text(self.screen, '"아무래도 인간을 속이기 위한 작전 같습니다.. 그래서 살충제 모기꺼져를 드리겠습니다."', 10, pygame.Color('Blue'), 300,
+                      60)
+            draw_text(self.screen, '이게 뭔 소식인가.. 나 그냥 친구가 뉴스 보라고 해서 본 건데.. 아... 언제 끝나..', 10, pygame.Color('Blue'), 300,
+                      90)
             draw_text(self.screen, '스페이스바를 눌러 시작', 50, pygame.Color('Blue'), 300, 180)
+
             pygame.display.flip()
             self.time_stop()
-            self.next_bool[0] = False
+            self.next_bool[1] = False
         if self.mogi_num <= 0:
             self.mogi_num = self.mogi_if + self.mogi_plus
             self.mogi_kill = 0
-        if self.mogiguzer_use_number > 10:
-            draw_text(self.screen, '당신은 모기꺼져에 들어있던 방귀 때문에 죽었습니다')
+        if self.stage == 20 and self.next_bool[2]:
+            self.screen.fill((0, 0, 0))
+            draw_text(self.screen, '이제 실전이다. 모기의 왕이 온다.', 20, pygame.Color('Blue'), SCREEN_X / 2, SCREEN_Y / 2)
+            pygame.mixer.music.load(music_list[0])
+            pygame.mixer.music.play(-1)
+            pygame.display.flip()
+            self.ending = True
+            self.time_stop()
+            self.next_bool[2] = False
+        if self.stage == 21:
+            self.mogi_num = 0
+            self.all_sprite = None
+
+        if self.mogiguzer_use_number > 50:
+            self.screen.fill((0, 0, 0))
+            draw_text(self.screen, '당신은 모기꺼져에 들어있던 방귀 때문에 죽었습니다', 20, pygame.Color('Blue'), SCREEN_X / 2, SCREEN_Y / 2)
             pygame.display.flip()
             self.time_stop()
-
-
-
-
-
-
+            pygame.quit()
 
     def draw(self):
         self.screen.fill(pygame.Color('White'))
@@ -224,7 +261,12 @@ class Game:
         draw_text(self.screen, f'남은 시간: {self.time_minus - int(self.time / 1000)}', 20, pygame.Color('Black'), 120, 90)
         draw_text(self.screen, f'잡아야 하는 모기:: {(self.mogi_if + self.mogi_plus) - self.mogi_kill + 1}', 20,
                   pygame.Color('Black'), 450, 90)
-        draw_text(self.screen, f'스테이지: {self.stage}', 30, pygame.Color('Blue'), 100, 400)
+        if self.ending == True:
+            self.stage = 200
+            self.time_minus = 70
+            draw_text(self.screen, f'스테이지: FINAL', 30, pygame.Color('Blue'), 100, 400)
+        else:
+            draw_text(self.screen, f'스테이지: {self.stage}', 30, pygame.Color('Blue'), 100, 400)
 
     def time_stop(self):
         self.stop = True
@@ -234,12 +276,10 @@ class Game:
             if self.pressed_key[pygame.K_SPACE]:
                 self.stop = False
 
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.stop = False
                     self.playing = False
-
 
     def opning(self):
         draw_text(self.screen, '어느 날... 별 차이 없는 평범한 날.. 흘러나오는 뉴스..', 20, pygame.Color('Blue'), 150, 30)
